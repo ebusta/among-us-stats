@@ -10,7 +10,12 @@ exports.getAllPlayers = async () => {
   return playerList;
 };
 
-exports.createPlayer = async (reqBody) => {
-  const newPlayer = await knex('player').returning('*').insert({ player_name: reqBody.player_name });
+exports.createPlayer = async (playerName) => {
+  const newPlayer = await knex('player').returning('*').insert({ player_name: playerName });
   return newPlayer;
+};
+
+exports.getPlayerIDByName = async (playerName) => {
+  const playerID = await knex('player').where({ player_name: playerName }).select('player_id');
+  return playerID;
 };

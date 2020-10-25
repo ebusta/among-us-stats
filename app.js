@@ -12,6 +12,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const statsRouter = require('./routes/statsRoutes');
 const playerRouter = require('./routes/playerRoutes');
 const mapRouter = require('./routes/mapRoutes');
+const groupRouter = require('./routes/groupRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
@@ -50,6 +51,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/api/v1/stats', statsRouter);
 app.use('/api/v1/players', playerRouter);
 app.use('/api/v1/maps', mapRouter);
+app.use('/api/v1/groups', groupRouter);
 app.use('/newgame', viewRouter);
 
 app.all('*', (req, res, next) => {

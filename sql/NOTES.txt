@@ -9,88 +9,47 @@ INSERT INTO hello (text) VALUES
 	('lovely'),
 	('person');
 
-ALLOW REMOTE CONNECTIONS THROUGH FIREWALL: sudo ufw allow 5432/tcp     //assumes 5432 is the postgres port, which it is by default. 
+ALLOW REMOTE CONNECTIONS THROUGH FIREWALL: 
+	sudo ufw allow 5432/tcp     //assumes 5432 is the postgres port, which it is by default. 
 
-LOGIN AS ERIK USER: psql -d among_us_stats_test -U erik
+LOGIN AS ERIK USER: 
+	psql -d among_us_stats_test -U erik
 
-RUN SQL SCRIPT: psql erik -d among_us_stats_test -f insert_test.sql
+RUN SQL SCRIPT: 
+	psql erik -d among_us_stats_test -f /home/erik/db/among-us-test/build.sql
 
-ALLOW REMOTE CONNECTIONS TO POSTGRESQL: went to /etc/postgresql/9.1/main/postgresql.conf , uncommented the line that said: listen_addresses = 'localhost' and changed the value to *
-										then went to the pg_hba.conf file in the same directory and added this line at the bottom: host all all  0.0.0.0/0 md5
+ALLOW REMOTE CONNECTIONS TO POSTGRESQL: 
+	went to /etc/postgresql/9.1/main/postgresql.conf , uncommented the line that said: listen_addresses = 'localhost' and changed the value to *
+	then went to the pg_hba.conf file in the same directory and added this line at the bottom: host all all  0.0.0.0/0 md5
+										
+REMOVE CR CHARARCTERS FROM FILES: 
+	perl -p -i -e "s/\r//g" <filename>
 
-DROP TABLE IF EXISTS game CASCADE;
-DROP TABLE IF EXISTS player CASCADE;
-DROP TABLE IF EXISTS map CASCADE;
-DROP TABLE IF EXISTS murder CASCADE;
-DROP TABLE IF EXISTS player_game CASCADE;
+BACKUP DATABASE: 
+	pg_dump among_us_stats_test > <filename>
 
-DROP FUNCTION IF EXISTS create_game_get_id CASCADE;
+REBUILD DATABASE FROM BACKUP: 
+	First you have to create the database if this isn't already done (likely manually). 
+	psql <dbname> -f <filename> -1 -- not sure if <dbname> needs to be here
+							  
+CRON BACKUP LOG CRON: 
+	0 5 * * * pg_dump among_us_stats_test > /home/erik/db/among-us-test/backups/logs/`date +\%Y\%m\%d\%H\%M\%S`-cron.log 2>&1
 
-CREATE TABLE game (
-	game_id INT GENERATED ALWAYS AS IDENTITY,
-	game_date TIMESTAMP NOT NULL,
-	map_id INT NOT NULL,
-	who_won VARCHAR(10) CHECK (who_won in ('crew', 'imp')) NOT NULL,
-	how_victory_achieved VARCHAR(10) CHECK (how_victory_achieved in ('murder', 'emergency', 'deception', 'tasks', 'ejection')) NOT NULL,
-	PRIMARY KEY(game_id)
-);
+GIT COMMANDS
+	git init
+	git remote add origin <ssh path>
+	git status
+	git add -A
+	git commit -m "<message>"
+	git push origin master
 
-CREATE TABLE player (
-	player_id INT GENERATED ALWAYS AS IDENTITY,
-	player_name VARCHAR(255) NOT NULL,
-	PRIMARY KEY(player_id)
-);
+PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]\
+@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
 
-CREATE TABLE map (
-	map_id INT GENERATED ALWAYS AS IDENTITY,
-	map_name VARCHAR(255) NOT NULL,
-	PRIMARY KEY(map_id)
-);
+NOTE: catchAsync functions require next as a param. Is that why it was breaking on my app?
 
-CREATE TABLE murder (
-	murder_id INT GENERATED ALWAYS AS IDENTITY,
-	player_id INT NOT NULL,
-	game_id INT NOT NULL,
-	victim_id INT NOT NULL,
-	PRIMARY KEY(murder_id)
-);
-
-CREATE TABLE player_game (
-	player_game_id INT GENERATED ALWAYS AS IDENTITY,
-	player_id INT NOT NULL,
-	game_id INT NOT NULL,
-	player_type VARCHAR (10) CHECK (player_type in ('crew', 'imp')) NOT NULL,
-	death_type VARCHAR (10) CHECK (death_type in ('ejection', 'murder', 'emergency')),
-	is_victorious BOOLEAN NOT NULL,
-	PRIMARY KEY(player_game_id)
-);
-
-ALTER TABLE game ADD CONSTRAINT fk_game FOREIGN KEY(map_id) REFERENCES map(map_id);
-ALTER TABLE murder ADD CONSTRAINT fk_player FOREIGN KEY(player_id) REFERENCES player(player_id);
-ALTER TABLE murder ADD CONSTRAINT fk_game FOREIGN KEY(game_id) REFERENCES game(game_id);
-ALTER TABLE murder ADD CONSTRAINT fk_victim FOREIGN KEY(victim_id) REFERENCES player(player_id);
-ALTER TABLE player_game ADD CONSTRAINT fk_player FOREIGN KEY(player_id) REFERENCES player(player_id);
-ALTER TABLE player_game ADD CONSTRAINT fk_game FOREIGN KEY(game_id) REFERENCES game(game_id);
-
-INSERT INTO map (map_name) VALUES ('The Skeld'); //1
-INSERT INTO map (map_name) VALUES ('MIRA HQ'); //2
-INSERT INTO map (map_name) VALUES ('Polus'); //3
-
-////////////////////////////////////////////////////////////////////////////
-
-CREATE FUNCTION create_game_get_id 
-[
-	{
-		player_name: 'Erik',
-		player_type: 'imp',
-		death_type: 'murder',
-		is_victorious: true
-	},
-	{
-		player_name: 'Fart',
-		player_type: 'crew',
-		death_type: null,
-		is_victorious: false
-	}
-]
-
+THOUGHTS: Maybe don't do 20mg of weed chocolate before programming. 
+		  Also, need to be certain of the logic when creating stuff. 
+			At first, a group is created. When you're creating a group, you have to either add new users or select existing users. 
+			You can add users to a group, either existing ones or new ones. 
+			There's no real management via users, only via groups. All you can really do is create a new player, but you never do anything just as a player afterwards. You have to go to the group to add an existing player in. 

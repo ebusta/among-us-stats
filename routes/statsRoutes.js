@@ -1,4 +1,4 @@
-const { check, body, validationResult } = require('express-validator');
+// const { check, body, validationResult } = require('express-validator');
 const express = require('express');
 const validate = require('../utils/validation');
 const statsController = require('../controllers/statsController');

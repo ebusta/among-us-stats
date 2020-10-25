@@ -6,7 +6,7 @@ const knex = require('knex')({
 });
 const moment = require('moment');
 
-const catchAsync = require('../utils/catchAsync');
+//const catchAsync = require('../utils/catchAsync');
 //const AppError = require('../utils/appError');
 
 exports.createGameReturnID = async (reqBody, next) => {
@@ -16,6 +16,7 @@ exports.createGameReturnID = async (reqBody, next) => {
     map_id: reqBody.map_id,
     who_won: reqBody.who_won,
     how_victory_achieved: reqBody.how_victory_achieved,
+    group_id: reqBody.group_id,
   });
   return gameID[0];
 };
@@ -32,6 +33,8 @@ exports.createPlayerGameReturnID = async (player, gameID) => {
 };
 
 exports.createMurdersReturnIDs = async (player, gameID) => {
+  //console.log(gameID);
+  //console.log(player);
   const murderIDs = await Promise.all(
     player.murders.map(async (victim) => {
       const murderID = await knex('murder').returning('murder_id').insert({
