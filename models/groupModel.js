@@ -19,9 +19,34 @@ exports.createGroup = async (reqBody) => {
 };
 
 exports.createPlayerGroup = async (playerID, groupID) => {
+  //console.log(playerID, groupID);
   const newPlayerGroup = await knex('player_group').returning('*').insert({
     player_id: playerID,
     group_id: groupID,
   });
   return newPlayerGroup;
+};
+
+exports.checkIfGroupExists = async (groupID) => {
+  try {
+    const group = await knex('group_').where({ group_id: groupID }).select('group_id');
+    return group;
+  } catch (err) {
+    return null;
+  }
+};
+
+exports.checkIfPlayerInGroup = async (playerID, groupID) => {
+  try {
+    //console.log(playerID, groupID);
+    const playerGroup = await knex('player_group')
+      .where({
+        player_id: playerID,
+        group_id: groupID,
+      })
+      .select('player_group_id');
+    return playerGroup;
+  } catch (err) {
+    return null;
+  }
 };

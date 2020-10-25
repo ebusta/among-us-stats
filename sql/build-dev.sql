@@ -81,9 +81,9 @@ INSERT INTO map (map_id, map_name) VALUES ('b4370a0a-b0b4-46c5-969e-6c4bf2fba3e7
 INSERT INTO group_ (group_id, group_name, pword) VALUES ('a78128f7-c143-49bb-b2f1-2a5064a1f448', 'test_group', 'password');
 
 -- INSERT INTO player (player_name) VALUES ('Test1');
-INSERT INTO player (player_id, player_name) VALUES ('fc1ed42d-7d40-4a4f-8aa1-b8e6861f20a8', 'Test1');
-INSERT INTO player (player_id, player_name) VALUES ('3e0e41aa-a6f1-4f48-b0cf-06bb768d1c6d', 'Test2');
-INSERT INTO player (player_id, player_name) VALUES ('2c9bf650-7b1f-4b09-a08f-f0e96f4ad7bc', 'Test3');
+INSERT INTO player (player_id, player_name) VALUES ('fc1ed42d-7d40-4a4f-8aa1-b8e6861f20a8', 'test1');
+INSERT INTO player (player_id, player_name) VALUES ('3e0e41aa-a6f1-4f48-b0cf-06bb768d1c6d', 'test2');
+INSERT INTO player (player_id, player_name) VALUES ('2c9bf650-7b1f-4b09-a08f-f0e96f4ad7bc', 'test3');
 
 
 INSERT INTO player_group (player_id, group_id) VALUES ('fc1ed42d-7d40-4a4f-8aa1-b8e6861f20a8', 'a78128f7-c143-49bb-b2f1-2a5064a1f448');
