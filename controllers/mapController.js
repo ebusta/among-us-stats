@@ -1,0 +1,14 @@
+const Map = require('../models/mapModel');
+const catchAsync = require('../utils/catchAsync');
+//const AppError = require('../utils/appError');
+
+exports.getAllMaps = catchAsync(async (req, res, next) => {
+  const maps = await Map.getAllMaps();
+  res.status('200').json({
+    status: 'success',
+    results: maps.length,
+    data: {
+      maps,
+    },
+  });
+});

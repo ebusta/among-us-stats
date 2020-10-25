@@ -1,0 +1,96 @@
+CREATE TABLE hello (
+    id serial PRIMARY KEY,
+    text varchar (50) NOT NULL
+);
+
+INSERT INTO hello (text) VALUES
+	('hello'),
+	('you'),
+	('lovely'),
+	('person');
+
+ALLOW REMOTE CONNECTIONS THROUGH FIREWALL: sudo ufw allow 5432/tcp     //assumes 5432 is the postgres port, which it is by default. 
+
+LOGIN AS ERIK USER: psql -d among_us_stats_test -U erik
+
+RUN SQL SCRIPT: psql erik -d among_us_stats_test -f insert_test.sql
+
+ALLOW REMOTE CONNECTIONS TO POSTGRESQL: went to /etc/postgresql/9.1/main/postgresql.conf , uncommented the line that said: listen_addresses = 'localhost' and changed the value to *
+										then went to the pg_hba.conf file in the same directory and added this line at the bottom: host all all  0.0.0.0/0 md5
+
+DROP TABLE IF EXISTS game CASCADE;
+DROP TABLE IF EXISTS player CASCADE;
+DROP TABLE IF EXISTS map CASCADE;
+DROP TABLE IF EXISTS murder CASCADE;
+DROP TABLE IF EXISTS player_game CASCADE;
+
+DROP FUNCTION IF EXISTS create_game_get_id CASCADE;
+
+CREATE TABLE game (
+	game_id INT GENERATED ALWAYS AS IDENTITY,
+	game_date TIMESTAMP NOT NULL,
+	map_id INT NOT NULL,
+	who_won VARCHAR(10) CHECK (who_won in ('crew', 'imp')) NOT NULL,
+	how_victory_achieved VARCHAR(10) CHECK (how_victory_achieved in ('murder', 'emergency', 'deception', 'tasks', 'ejection')) NOT NULL,
+	PRIMARY KEY(game_id)
+);
+
+CREATE TABLE player (
+	player_id INT GENERATED ALWAYS AS IDENTITY,
+	player_name VARCHAR(255) NOT NULL,
+	PRIMARY KEY(player_id)
+);
+
+CREATE TABLE map (
+	map_id INT GENERATED ALWAYS AS IDENTITY,
+	map_name VARCHAR(255) NOT NULL,
+	PRIMARY KEY(map_id)
+);
+
+CREATE TABLE murder (
+	murder_id INT GENERATED ALWAYS AS IDENTITY,
+	player_id INT NOT NULL,
+	game_id INT NOT NULL,
+	victim_id INT NOT NULL,
+	PRIMARY KEY(murder_id)
+);
+
+CREATE TABLE player_game (
+	player_game_id INT GENERATED ALWAYS AS IDENTITY,
+	player_id INT NOT NULL,
+	game_id INT NOT NULL,
+	player_type VARCHAR (10) CHECK (player_type in ('crew', 'imp')) NOT NULL,
+	death_type VARCHAR (10) CHECK (death_type in ('ejection', 'murder', 'emergency')),
+	is_victorious BOOLEAN NOT NULL,
+	PRIMARY KEY(player_game_id)
+);
+
+ALTER TABLE game ADD CONSTRAINT fk_game FOREIGN KEY(map_id) REFERENCES map(map_id);
+ALTER TABLE murder ADD CONSTRAINT fk_player FOREIGN KEY(player_id) REFERENCES player(player_id);
+ALTER TABLE murder ADD CONSTRAINT fk_game FOREIGN KEY(game_id) REFERENCES game(game_id);
+ALTER TABLE murder ADD CONSTRAINT fk_victim FOREIGN KEY(victim_id) REFERENCES player(player_id);
+ALTER TABLE player_game ADD CONSTRAINT fk_player FOREIGN KEY(player_id) REFERENCES player(player_id);
+ALTER TABLE player_game ADD CONSTRAINT fk_game FOREIGN KEY(game_id) REFERENCES game(game_id);
+
+INSERT INTO map (map_name) VALUES ('The Skeld'); //1
+INSERT INTO map (map_name) VALUES ('MIRA HQ'); //2
+INSERT INTO map (map_name) VALUES ('Polus'); //3
+
+////////////////////////////////////////////////////////////////////////////
+
+CREATE FUNCTION create_game_get_id 
+[
+	{
+		player_name: 'Erik',
+		player_type: 'imp',
+		death_type: 'murder',
+		is_victorious: true
+	},
+	{
+		player_name: 'Fart',
+		player_type: 'crew',
+		death_type: null,
+		is_victorious: false
+	}
+]
+
