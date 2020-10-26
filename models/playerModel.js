@@ -11,11 +11,22 @@ exports.getAllPlayers = async () => {
 };
 
 exports.createPlayer = async (playerName) => {
-  const newPlayer = await knex('player').returning('*').insert({ player_name: playerName });
-  return newPlayer;
+  try {
+    //console.log(playerName);
+    const newPlayer = await knex('player').returning('*').insert({ player_name: playerName });
+    return newPlayer;
+  } catch (err) {
+    //console.log(err);
+    return null;
+  }
 };
 
 exports.getPlayerIDByName = async (playerName) => {
-  const playerID = await knex('player').where({ player_name: playerName }).select('player_id');
-  return playerID;
+  try {
+    const playerID = await knex('player').where({ player_name: playerName }).select('player_id');
+    return playerID;
+  } catch (err) {
+    //console.log(err);
+    return null;
+  }
 };

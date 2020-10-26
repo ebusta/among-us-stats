@@ -52,7 +52,7 @@ CREATE TABLE player_game (
 
 CREATE TABLE group_ (
   group_id uuid DEFAULT uuid_generate_v4 (),
-  group_name VARCHAR (255) NOT NULL,
+  group_name VARCHAR (255) NOT NULL UNIQUE,
   pword VARCHAR (255) NOT NULL,
   PRIMARY KEY (group_id)
 );

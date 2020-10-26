@@ -4,18 +4,30 @@ const knex = require('knex')({
   //searchPath: ['knex', 'public'],
   //debug: true,
 });
+const bcrypt = require('bcryptjs');
+//const crypto = require('crypto');
+
+encryptPword = async (pword) => {
+  const encryptedPword = await bcrypt.hash(pword, 12);
+  return encryptedPword;
+};
 
 exports.getAllGroups = async () => {
-  const groupList = await knex.select('*').from('group');
+  const groupList = await knex.select('*').from('group_');
   return groupList;
 };
 
 exports.createGroup = async (reqBody) => {
-  const newGroup = await knex('group').returning('*').insert({
-    group_name: reqBody.group_name,
-    pword: reqBody.pword,
-  });
-  return newGroup;
+  try {
+    const encryptedPword = await encryptPword(reqBody.pword);
+    const newGroup = await knex('group_').returning('*').insert({
+      group_name: reqBody.group_name,
+      pword: encryptedPword,
+    });
+    return newGroup;
+  } catch (err) {
+    return null;
+  }
 };
 
 exports.createPlayerGroup = async (playerID, groupID) => {
@@ -36,9 +48,17 @@ exports.checkIfGroupExists = async (groupID) => {
   }
 };
 
+exports.findGroupByName = async (groupName) => {
+  try {
+    const group = await knex('group_').where({ group_name: groupName }).select('group_id', 'group_name', 'pword');
+    return group;
+  } catch (err) {
+    return null;
+  }
+};
+
 exports.checkIfPlayerInGroup = async (playerID, groupID) => {
   try {
-    //console.log(playerID, groupID);
     const playerGroup = await knex('player_group')
       .where({
         player_id: playerID,
@@ -49,4 +69,8 @@ exports.checkIfPlayerInGroup = async (playerID, groupID) => {
   } catch (err) {
     return null;
   }
+};
+
+exports.correctPassword = async (pword, pwordToCheck) => {
+  return await bcrypt.compare(pword, pwordToCheck);
 };

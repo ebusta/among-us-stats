@@ -1,6 +1,6 @@
 const Player = require('../models/playerModel');
 const catchAsync = require('../utils/catchAsync');
-//const AppError = require('../utils/appError');
+const AppError = require('../utils/appError');
 
 const sendRes = (res, statusCode, status, data) => {
   res.status(statusCode).json({
@@ -17,5 +17,8 @@ exports.getAllPlayers = catchAsync(async (req, res, next) => {
 
 exports.createPlayer = catchAsync(async (req, res, next) => {
   const newPlayer = await Player.createPlayer(req.body.player_name);
+  if (!newPlayer) {
+    return next(new AppError('Player name is already taken, please try another.', 400));
+  }
   sendRes(res, '201', 'success', newPlayer);
 });
