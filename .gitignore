@@ -32,6 +32,9 @@ Latest commit c54e130 5 minutes ago
 
 # env
 *.env
+
+# notes
+NOTES.txt
   
 # Logs
 logs
