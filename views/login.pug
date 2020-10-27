@@ -1,0 +1,15 @@
+extends base
+
+block content
+  main.main
+    .login-form
+      h2.heading-secondary.ma-bt-lg Log into your account
+      form.form.form--login
+        .form__group
+          label.form__label(for='groupName') Group Name
+          input#group.form__input(placeholder='best_group', required)
+        .form__group.ma-bt-md
+          label.form__label(for='pword') Password
+          input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+        .form__group
+          button.btn.btn--green Login

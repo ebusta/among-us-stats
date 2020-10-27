@@ -1,0 +1,25 @@
+extends base
+
+block content
+  main.main
+    h2.heading-secondary.ma-bt-lg Add a new group
+      form.form.form--create-group
+        .form__group
+          label.form__label(for='groupName') Group Name
+          //- input#group.form__input(placeholder='best_group', required)
+          input#group.form__input(placeholder='best_group')
+        .form__group.ma-bt-md
+          label.form__label(for='pword') Password
+          //- input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+          input#password.form__input(type='password', placeholder='••••••••')
+        .form__group.ma-bt-md
+          label.form__label(for='pwordConfirm') Confirm Password
+          //- input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+          input#password-confirm.form__input(type='password', placeholder='••••••••')
+        #add-players-form__group
+          .form__group.ma-bt-md
+            label.form__label(for='player') Players
+            input.form__input.player__input(placeholder='Player Name')
+        .form__group
+          button.btn.btn--green.add-players(type='button' onClick='') Add More Players
+          button.btn.btn--green Submit

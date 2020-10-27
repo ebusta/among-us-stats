@@ -1,0 +1,18 @@
+header.header
+  nav.nav.nav--tours
+    if group
+      a.nav__el(href='/') New game
+    else
+      a.nav__el(href='/create-new-group') New group
+  .header__logo
+    img(src='/img/among-us-icon-white.png' alt='White')
+  nav.nav.nav--user
+    if group
+      a.nav__el.nav__el--logout Log out
+      a.nav__el(href='/group')
+        img.nav__user-img(src=`/img/among-us-icon-orange.png` alt=`Orange`)
+        //- span= group.group_name.split(' ')[0]
+        span= group[0].group_name
+    else
+      a.nav__el(href='/login') Login
+      a.nav__el.nav__el--cta(href='/create-new-group') Create Group

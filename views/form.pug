@@ -1,19 +1,19 @@
-extends layout
+//- extends layout
 
-block content
-  form(action="." method="POST")
-    label(for="name") Name:
-    input(
-      type="text"
-      id="name"
-      name="name"
-    )
+//- block content
+form(action="." method="POST")
+  label(for="groupName") Group Name:
+  input(
+    type="text"
+    id="groupName"
+    name="group name"
+  )
 
-    label(for="email") Email:
-    input(
-      type="email"
-      id="email"
-      name="email"
-    )
+  //- label(for="email") Email:
+  //- input(
+  //-   type="email"
+  //-   id="email"
+  //-   name="email"
+  //- )
 
-    input(type="submit" value="Submit")
+  input(type="submit" value="Submit")

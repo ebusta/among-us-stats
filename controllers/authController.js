@@ -82,8 +82,10 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 2) Check if group exists and if password is correct
   const group = await Group.findGroupByName(groupName);
+  console.log(pword, group[0].pword);
 
   if (!group || !(await Group.correctPassword(pword, group[0].pword))) {
+    console.log('oh no');
     return next(new AppError('Incorrect group name or password', 401));
   }
 
@@ -101,6 +103,7 @@ exports.logout = (req, res) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
+  //console.log(req.body);
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
@@ -127,32 +130,34 @@ exports.protect = catchAsync(async (req, res, next) => {
   // }
 
   // GRANT ACCESS TO PROTECTED ROUTE
-  req.user = currentGroup;
-  res.locals.user = currentGroup;
+  req.group = currentGroup;
+  res.locals.group = currentGroup;
   next();
 });
 
 // Only for rendered pages, won't throw any errors
-//TODO: Refactor when used
 exports.isLoggedIn = async (req, res, next) => {
-  if (req.cookies.jwt) {
+  //console.log(req.cookies);
+  if (req.cookies && req.cookies.jwt) {
     try {
       // 1) Verifies token
       const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
 
       // 2) Check if user still exists
-      const currentUser = await Group.findById(decoded.id);
-      if (!currentUser) {
+      const currentGroup = await Group.findGroupByID(decoded.id);
+      //console.log(currentGroup);
+      if (!currentGroup) {
         return next();
       }
 
       // 3) Check if user changed password after the token was issued
-      if (currentUser.changedPasswordAfter(decoded.iat)) {
-        return next();
-      }
+      // NOT IMPLEMENTING NOW
+      // if (currentUser.changedPasswordAfter(decoded.iat)) {
+      //   return next();
+      // }
 
       // THERE IS A LOGGED IN USER
-      res.locals.user = currentUser;
+      res.locals.group = currentGroup;
       return next();
     } catch (err) {
       return next();

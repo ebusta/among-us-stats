@@ -41,7 +41,7 @@ exports.createPlayerGroup = async (playerID, groupID) => {
 
 exports.checkIfGroupExists = async (groupID) => {
   try {
-    const group = await knex('group_').where({ group_id: groupID }).select('group_id');
+    const group = await knex('group_').where({ group_id: groupID }).select('group_id', 'group_name');
     return group;
   } catch (err) {
     return null;
@@ -57,6 +57,15 @@ exports.findGroupByName = async (groupName) => {
   }
 };
 
+exports.findGroupByID = async (groupID) => {
+  try {
+    const group = await knex('group_').where({ group_id: groupID }).select('group_id', 'group_name', 'pword');
+    return group;
+  } catch (err) {
+    return null;
+  }
+};
+
 exports.checkIfPlayerInGroup = async (playerID, groupID) => {
   try {
     const playerGroup = await knex('player_group')
@@ -66,6 +75,19 @@ exports.checkIfPlayerInGroup = async (playerID, groupID) => {
       })
       .select('player_group_id');
     return playerGroup;
+  } catch (err) {
+    return null;
+  }
+};
+
+exports.getAllPlayersInGroup = async (groupID) => {
+  try {
+    const players = await knex('player_group')
+      .join('player', 'player_group.player_id', '=', 'player.player_id')
+      .where({ 'player_group.group_id': groupID })
+      .select('player.player_name', 'player.player_id');
+    return players;
+    console.log(players);
   } catch (err) {
     return null;
   }

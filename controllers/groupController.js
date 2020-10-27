@@ -11,6 +11,24 @@ const sendRes = (res, statusCode, status, data) => {
   });
 };
 
+exports.getAllPlayersInGroup = catchAsync(async (req, res, next) => {
+  const players = await Group.getAllPlayersInGroup(req.group[0].group_id);
+  //console.log(players);
+  req.players = players;
+  res.locals.players = players;
+  return next();
+});
+
+exports.getGroupByName = catchAsync(async (req, res, next) => {
+  const group = await Group.getGroupByName(req.body);
+  sendRes(res, '200', 'success', group);
+});
+
+exports.getGroupByID = catchAsync(async (req, res, next) => {
+  const group = await Group.getGroupByName(req.body);
+  sendRes(res, '200', 'success', group);
+});
+
 exports.getAllGroups = catchAsync(async (req, res, next) => {
   const groups = await Group.getAllGroups();
   sendRes(res, '200', 'success', groups);
