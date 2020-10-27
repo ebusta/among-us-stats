@@ -14,3 +14,11 @@ block content
     .reviews
       each player in players
         +playerCard(player)
+  h2.heading-secondary.ma-bt-lg Add a new player
+    form.form.form--add-player-to-group 
+      .form__group
+        .form__group.ma-bt-md
+          label.form__label(for='player') New Player
+          input#player-name.form__input.player__input(placeholder='Player Name', required)
+        .form__group
+          button.btn.btn--green Submit

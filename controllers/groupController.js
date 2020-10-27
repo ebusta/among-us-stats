@@ -59,7 +59,7 @@ exports.getAllGroups = catchAsync(async (req, res, next) => {
 
 exports.addPlayerToGroup = catchAsync(async (req, res, next) => {
   // check if group exists
-  const groupID = await Group.checkIfGroupExists(req.body.group_id);
+  const groupID = await Group.checkIfGroupExists(req.group[0].group_id);
   //group doesn't exist
   if (!groupID) {
     return next(new AppError('This group does not exist!', 404));
@@ -70,7 +70,7 @@ exports.addPlayerToGroup = catchAsync(async (req, res, next) => {
   if (playerID.length === 0) {
     // make new player, add to group
     const newPlayerID = await Player.createPlayer(req.params.name);
-    const playerGroupID = await Group.createPlayerGroup(newPlayerID[0].player_id, req.body.group_id);
+    const playerGroupID = await Group.createPlayerGroup(newPlayerID[0].player_id, req.group[0].group_id);
     sendRes(res, '201', 'success', {
       player_id: newPlayerID[0].player_id,
       player_name: newPlayerID[0].player_name,
@@ -79,13 +79,13 @@ exports.addPlayerToGroup = catchAsync(async (req, res, next) => {
     });
   }
   // group and player exist, so check if player is already in group
-  const playerGroup = await Group.checkIfPlayerInGroup(playerID[0].player_id, req.body.group_id);
+  const playerGroup = await Group.checkIfPlayerInGroup(playerID[0].player_id, req.group[0].group_id);
   // player is already in group
   if (playerGroup[0]) {
     return next(new AppError('This player is already in this group!', 400));
   }
   // group and player exist, player is not in group
-  const playerGroupID = await Group.createPlayerGroup(playerID[0].player_id, req.body.group_id);
+  const playerGroupID = await Group.createPlayerGroup(playerID[0].player_id, req.group[0].group_id);
   sendRes(res, '201', 'success', {
     player_id: playerID[0].player_id,
     player_name: playerID[0].player_name,

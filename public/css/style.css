@@ -154,7 +154,7 @@ body {
   font-size: 5rem;
   text-align: center;
   width: 70%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .heading-tertirary {
@@ -1160,7 +1160,7 @@ body {
   display: block;
   font-family: inherit;
   font-size: 1.5rem;
-  color: inherit;
+  /* color: inherit; */
   padding: 1.25rem 1.75rem;
   border: none;
   width: 100%;

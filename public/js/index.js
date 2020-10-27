@@ -2,15 +2,16 @@
 import '@babel/polyfill';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
-import { addNewPlayerInput, createNewGroup } from './addGroup';
+import { addNewPlayerInput, createNewGroup, addPlayerToGroup } from './groupManagement';
 
 // DOM ELEMENTS
 const loginForm = document.querySelector('.form--login');
 const newGroupForm = document.querySelector('.form--create-group');
+const newPlayerForm = document.querySelector('.form--add-player-to-group');
 const logoutButton = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
-const addPlayerButton = document.querySelector('.add-players');
+const addPlayerButton = document.querySelector('.add-players-new-group');
 
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
@@ -34,6 +35,14 @@ if (newGroupForm) {
       return { player_name: el.value };
     });
     createNewGroup(groupName, pword, pwordConfirm, playerNamesArray);
+  });
+}
+
+if (newPlayerForm) {
+  newPlayerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const playerName = document.getElementById('player-name').value;
+    addPlayerToGroup(playerName);
   });
 }
 

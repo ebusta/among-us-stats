@@ -43,3 +43,28 @@ export const createNewGroup = async (groupName, pword, pwordConfirm, players) =>
     showAlert('error', err.response.data.message);
   }
 };
+
+export const addPlayerToGroup = async (playerName) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `/api/v1/groups/addPlayerToGroup/${playerName}`,
+      // data: {
+      //   group_name: groupName,
+      //   pword,
+      //   // pwordConfirm,
+      //   players,
+      // },
+      data: {},
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'Player added successfully!');
+      window.setTimeout(() => {
+        location.assign('/group');
+      }, 1500);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
