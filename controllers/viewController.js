@@ -1,7 +1,4 @@
-//const Stats = require('../models/statsModel');
-const Group = require('../models/groupModel');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
 
 exports.getMain = catchAsync(async (req, res, next) => {
   res.status(200).render('mainPage', {
@@ -21,32 +18,33 @@ exports.getGroup = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getLoginForm = (req, res) => {
+exports.getLoginForm = catchAsync(async (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',
   });
-};
+});
 
-exports.getAccount = (req, res) => {
-  res.status(200).render('account', {
-    title: 'Your account',
-  });
-};
-
-exports.updateUserData = catchAsync(async (req, res, next) => {
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      name: req.body.name,
-      email: req.body.email,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
-  res.status(200).render('account', {
-    title: 'Your account',
-    user: updatedUser,
+exports.newGame = catchAsync(async (req, res, next) => {
+  res.status(200).render('newgame', {
+    title: 'New game',
   });
 });
+
+// NOT CURRENTLY IMPLEMENTED
+// exports.updateUserData = catchAsync(async (req, res, next) => {
+//   const updatedUser = await User.findByIdAndUpdate(
+//     req.user.id,
+//     {
+//       name: req.body.name,
+//       email: req.body.email,
+//     },
+//     {
+//       new: true,
+//       runValidators: true,
+//     }
+//   );
+//   res.status(200).render('account', {
+//     title: 'Your account',
+//     user: updatedUser,
+//   });
+// });

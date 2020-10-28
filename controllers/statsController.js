@@ -1,11 +1,11 @@
 //const { body } = require('express-validator');
 const Stats = require('../models/statsModel');
 // const catchAsync = require('../utils/catchAsync');
-//const AppError = require('../utils/appError');
+const AppError = require('../utils/appError');
 
 exports.createNewGameStats = async (req, res, next) => {
   // make game records
-  const gameID = await Stats.createGameReturnID(req.body, next);
+  const gameID = await Stats.createGameReturnID(req.body, req.group_id, next);
   //console.log(gameID);
 
   // make playerGame records
@@ -15,6 +15,10 @@ exports.createNewGameStats = async (req, res, next) => {
       return playerGameID;
     })
   );
+  console.log(playerGameIDs);
+  if (!playerGameIDs) {
+    throw new AppError('There was a problem logging to the database. Please try again later.', 404);
+  }
   //console.log(playerGameIDs);
 
   // filter on players who have murders

@@ -9,27 +9,32 @@ const moment = require('moment');
 //const catchAsync = require('../utils/catchAsync');
 //const AppError = require('../utils/appError');
 
-exports.createGameReturnID = async (reqBody, next) => {
+exports.createGameReturnID = async (reqBody, groupID, next) => {
   const time = moment().format();
   const gameID = await knex('game').returning('game_id').insert({
     game_date: time,
     map_id: reqBody.map_id,
     who_won: reqBody.who_won,
     how_victory_achieved: reqBody.how_victory_achieved,
-    group_id: reqBody.group_id,
+    group_id: groupID,
   });
   return gameID[0];
 };
 
 exports.createPlayerGameReturnID = async (player, gameID) => {
-  const playerGameID = await knex('player_game').returning('player_game_id').insert({
-    player_id: player.player_id,
-    game_id: gameID,
-    player_type: player.player_type,
-    death_type: player.death_type,
-    is_victorious: player.is_victorious,
-  });
-  return playerGameID[0];
+  console.log(player.death_type);
+  try {
+    const playerGameID = await knex('player_game').returning('player_game_id').insert({
+      player_id: player.player_id,
+      game_id: gameID,
+      player_type: player.player_type,
+      death_type: player.death_type,
+      is_victorious: player.is_victorious,
+    });
+    return playerGameID[0];
+  } catch (err) {
+    return null;
+  }
 };
 
 exports.createMurdersReturnIDs = async (player, gameID) => {

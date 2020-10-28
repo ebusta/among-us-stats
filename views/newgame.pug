@@ -1,0 +1,32 @@
+extends base
+mixin formElementRadio(name, id, value, text)
+  .form-check-inline
+    input.form-check-input(type='radio', name=`${name}`, id=`${id}`, value=`${value}` required)
+    label.form-check-label(for=`${id}`)= text
+
+block content
+  main.main
+    h2.heading-secondary.ma-bt-lg Add new game details
+      form.form.form--create-game
+        h2 Select Map
+        each map, i in maps
+          .form-check-inline
+            input.form-check-input(type='radio', name='mapRadios', id=`mapRadio${i + 1}`, value=`${map.map_id}` required)
+            label.form-check-label(for=`mapRadio${i + 1}`)= map.map_name
+        h2 Who won?
+          +formElementRadio('winnerRadios', 'winnerRadioImp', 'imp', 'Impostors')
+          +formElementRadio('winnerRadios', 'winnerRadioCrew', 'crew', 'Crew')
+        h2 How was victory achieved?
+          +formElementRadio('victoryRadios', 'victoryRadioMurder', 'murder', 'Murder')
+          +formElementRadio('victoryRadios', 'victoryRadioEmergency', 'emergency', 'Emergency')
+          +formElementRadio('victoryRadios', 'victoryRadioDeception', 'deception', 'Deception')
+          +formElementRadio('victoryRadios', 'victoryRadioTasks', 'tasks', 'Tasks')
+          +formElementRadio('victoryRadios', 'victoryRadioEjection', 'ejection', 'Ejection')
+        h2 Select Players
+        each player, i in players
+          .form-check(id=`player${player.player_id}`)
+            input.form-check-input.add-player-options(type='checkbox', name='playerCheckboxes', value=`${player.player_id}`, id=`playerCheckbox${i + 1}`, pid=`${player.player_id}`)
+            label.form-check-label(for=`playerCheckbox${i + 1}`)= player.player_name
+        .form__group
+          button.btn.btn--green Submit
+          

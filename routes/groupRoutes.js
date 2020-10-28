@@ -8,5 +8,6 @@ router.route('/').get(authController.protect, groupController.getAllGroups).post
 router.route('/addPlayerToGroup/:name').patch(authController.protect, groupController.addPlayerToGroup);
 router.route('/login').post(authController.login);
 router.route('/logout').get(authController.logout);
+router.route('/players').get(authController.protect, groupController.getAllPlayersInGroupNoMiddleware);
 
 module.exports = router;

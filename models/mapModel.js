@@ -6,6 +6,10 @@ const knex = require('knex')({
 });
 
 exports.getAllMaps = async () => {
-  const mapList = await knex.select('*').from('map');
-  return mapList;
+  try {
+    const mapList = await knex.select('*').from('map');
+    return mapList;
+  } catch (err) {
+    return null;
+  }
 };

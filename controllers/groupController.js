@@ -19,6 +19,11 @@ exports.getAllPlayersInGroup = catchAsync(async (req, res, next) => {
   return next();
 });
 
+exports.getAllPlayersInGroupNoMiddleware = catchAsync(async (req, res, next) => {
+  const players = await Group.getAllPlayersInGroup(req.group[0].group_id);
+  sendRes(res, '200', 'success', players);
+});
+
 exports.getGroupByName = catchAsync(async (req, res, next) => {
   const group = await Group.getGroupByName(req.body);
   sendRes(res, '200', 'success', group);
@@ -33,29 +38,6 @@ exports.getAllGroups = catchAsync(async (req, res, next) => {
   const groups = await Group.getAllGroups();
   sendRes(res, '200', 'success', groups);
 });
-
-// exports.createGroup = catchAsync(async (req, res, next) => {
-//   const newGroup = await Group.createGroup(req.body);
-//   // if the create group request has players attached to it
-//   if (req.body.players) {
-//     const newPlayerGroupIDs = await Promise.all(
-//       req.body.players.map(async (el) => {
-//         const playerID = await Player.getPlayerIDByName(el.player_name);
-//         // if player already exists, don't create a new player
-//         if (playerID) {
-//           const newPlayerGroupID = await Group.createPlayerGroup(playerID, newGroup.group_id);
-//           return newPlayerGroupID;
-//         }
-//         // player doesn't exist, create a new player
-//         const newPlayerID = Player.createPlayer(el.player_name);
-//         return newPlayerID;
-//       })
-//     );
-//     sendRes(res, '201', 'success', [newGroup, newPlayerGroupIDs]);
-//   }
-//   // if the create group request has no players attached to it
-//   sendRes(res, '201', 'success', newGroup);
-// });
 
 exports.addPlayerToGroup = catchAsync(async (req, res, next) => {
   // check if group exists

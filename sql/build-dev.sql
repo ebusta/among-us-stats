@@ -45,7 +45,7 @@ CREATE TABLE player_game (
 	player_id uuid NOT NULL,
 	game_id uuid NOT NULL,
 	player_type VARCHAR (10) CHECK (player_type in ('crew', 'imp')) NOT NULL,
-	death_type VARCHAR (10) CHECK (death_type in ('ejection', 'murder', 'emergency')),
+	death_type VARCHAR (10) CHECK (death_type in ('ejection', 'murder', 'emergency', 'none')),
 	is_victorious BOOLEAN NOT NULL,
 	PRIMARY KEY(player_game_id)
 );
