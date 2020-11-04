@@ -50,7 +50,7 @@ if (newGroupForm) {
     const players = document.querySelectorAll('.player__input');
     const playersArray = Array.from(players);
     const playerNamesArray = playersArray.map((el) => {
-      return { player_name: el.value };
+      if (el.value !== '') return { player_name: el.value };
     });
     createNewGroup(groupName, pword, pwordConfirm, playerNamesArray);
   });
@@ -60,7 +60,7 @@ if (newPlayerForm) {
   newPlayerForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const playerName = document.getElementById('player-name').value;
-    addPlayerToGroup(playerName);
+    if (playerName !== '') addPlayerToGroup(playerName);
   });
 }
 

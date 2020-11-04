@@ -21,7 +21,7 @@ exports.createPlayer = async (playerName) => {
   }
 };
 
-exports.getPlayerIDByName = async (playerName) => {
+exports.getPlayerIDByName = async (playerName, groupID) => {
   try {
     const playerID = await knex('player').where({ player_name: playerName }).select('player_id');
     return playerID;

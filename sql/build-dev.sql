@@ -22,7 +22,7 @@ CREATE TABLE game (
 
 CREATE TABLE player (
 	player_id uuid DEFAULT uuid_generate_v4 (),
-	player_name VARCHAR(255) NOT NULL UNIQUE,
+	player_name VARCHAR(255) NOT NULL,
 	PRIMARY KEY(player_id)
 );
 

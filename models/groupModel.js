@@ -87,8 +87,8 @@ exports.getAllPlayersInGroup = async (groupID) => {
       .where({ 'player_group.group_id': groupID })
       .select('player.player_name', 'player.player_id');
     return players;
-    console.log(players);
   } catch (err) {
+    // console.log(err);
     return null;
   }
 };

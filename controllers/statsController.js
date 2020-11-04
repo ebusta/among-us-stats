@@ -15,7 +15,7 @@ exports.createNewGameStats = async (req, res, next) => {
       return playerGameID;
     })
   );
-  console.log(playerGameIDs);
+  //console.log(playerGameIDs);
   if (!playerGameIDs) {
     throw new AppError('There was a problem logging to the database. Please try again later.', 404);
   }

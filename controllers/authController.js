@@ -82,10 +82,10 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 2) Check if group exists and if password is correct
   const group = await Group.findGroupByName(groupName);
-  console.log(pword, group[0].pword);
+  // console.log(pword, group[0].pword);
 
   if (!group || !(await Group.correctPassword(pword, group[0].pword))) {
-    console.log('oh no');
+    // console.log('oh no');
     return next(new AppError('Incorrect group name or password', 401));
   }
 
