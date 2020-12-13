@@ -18,16 +18,12 @@ exports.getAllGroups = async () => {
 };
 
 exports.createGroup = async (reqBody) => {
-  console.log("Creating group")
-  console.log("~ reqBody", reqBody);
   try {
     const encryptedPword = await encryptPword(reqBody.pword);
-    console.log("~ encryptedPword", encryptedPword);
     const newGroup = await knex('group_').returning('*').insert({
       group_name: reqBody.group_name,
       pword: encryptedPword,
     });
-    console.log("~ newGroup", newGroup);
     return newGroup;
   } catch (err) {
     return null;

@@ -99,7 +99,6 @@ exports.getKilledByCounts = async (player_id) => {
       .where({ 'murder.victim_id': player_id })
       .groupBy('murder.player_id', 'player.player_name')
       .orderByRaw('1 DESC');
-    console.log('~ playersKilledByCounts', playersKilledByCounts);
     return playersKilledByCounts;
   } catch (err) {
     console.log('Error trying to find killedby count: ', err);
@@ -116,7 +115,6 @@ exports.getVictimCounts = async (player_id) => {
       .where({ 'murder.player_id': player_id })
       .groupBy('murder.player_id', 'murder.victim_id', 'player.player_name')
       .orderByRaw('1 DESC');
-    console.log('~ victimCounts', victimCounts);
     return victimCounts;
   } catch (err) {
     console.log('Error trying to find victim count: ', err);
