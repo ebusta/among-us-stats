@@ -61,7 +61,6 @@ exports.getPlayersByImposterCount = async (req, res, next) => {
 
 exports.getKilledByCounts = async (req, res, next) => {
   const killedByCounts = await Stats.getKilledByCounts(req.params.player_id);
-  console.log("~ killedByCounts", killedByCounts);
   res.killedByCounts = killedByCounts;
   res.locals.killedByCounts = killedByCounts;
   return next();
@@ -69,8 +68,21 @@ exports.getKilledByCounts = async (req, res, next) => {
 
 exports.getVictimCounts = async (req, res, next) => {
   const victimCounts = await Stats.getVictimCounts(req.params.player_id);
-  console.log("~ victimCounts", victimCounts);
   res.victimCounts = victimCounts;
   res.locals.victimCounts = victimCounts;
   return next();
 }
+
+exports.getWrongEjectionCount = async (req, res, next) => {
+  const wrongEjectionCount = await Stats.getWrongEjectionCount(req.params.player_id);
+  res.wrongEjectionCount = wrongEjectionCount;
+  res.locals.wrongEjectionCount = wrongEjectionCount;
+  return next();
+}
+
+exports.getKDRatio = async (req, res, next) => {
+  const kdRatio = await Stats.getKDRatio(req.params.player_id);
+  res.kdRatio = kdRatio;
+  res.locals.kdRatio = kdRatio;
+  return next();
+};

@@ -16,9 +16,9 @@ exports.getAllPlayers = catchAsync(async (req, res, next) => {
 });
 
 exports.getPlayer = catchAsync(async (req, res, next) => {
-
   const player = await Player.getPlayerById(req.params.player_id);
-  res.player = player
+  res.player = player;
+  res.locals.player = player;
   return next();
 });
 

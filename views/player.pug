@@ -6,6 +6,10 @@ block content
       .header__hero-overlay &nbsp;
       img.header__hero-img(src='/img/amongus.jpg', alt='So sus')
 
+    .heading-box
+      h1.heading-primary
+        span=player.player_name
+
   section.section-reviews
     .reviews
       h2.heading-secondary.ma-bt-lg Killed By Counts
@@ -18,3 +22,7 @@ block content
         div
           span=player.player_name
           span=player.victim_count
+      h2.heading-secondary.ma-bt-lg Games ejected as crew
+        p=wrongEjectionCount
+      h2.heading-secondary.ma-bt-lg Murder:Victim ratio
+        p=kdRatio

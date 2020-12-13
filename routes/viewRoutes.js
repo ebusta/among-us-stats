@@ -24,6 +24,8 @@ router.get(
   playerController.getPlayer,
   statsController.getKilledByCounts,
   statsController.getVictimCounts,
+  statsController.getWrongEjectionCount,
+  statsController.getKDRatio,
   viewController.getPlayer
 );
 router.get('/create-new-group', authController.isLoggedIn, viewController.createNewGroup);

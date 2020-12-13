@@ -121,3 +121,39 @@ exports.getVictimCounts = async (player_id) => {
     return null;
   }
 };
+
+exports.getWrongEjectionCount = async (player_id) => {
+  try {
+    const wrongEjectionCount = await knex
+      .select(knex.raw('count(*)'))
+      .from('player_game')
+      .where({ 'player_game.player_id': player_id })
+      .where({ 'player_game.player_type': 'crew' })
+      .where({ 'player_game.death_type': 'ejection' })
+      .groupBy('player_game.player_id');
+    return wrongEjectionCount[0] || 0;
+  } catch (err) {
+    console.log('Error trying to find victim count: ', err);
+    return null;
+  }
+};
+
+exports.getKDRatio = async (player_id) => {
+  try {
+    const kills = await knex
+      .select(knex.raw('count(*)'))
+      .from('murder')
+      .where({ 'murder.player_id': player_id })
+      .groupBy('player_id')
+    const deaths = await knex
+      .select(knex.raw('count(*)'))
+      .from('murder')
+      .where({ 'murder.victim_id': player_id })
+      .groupBy('victim_id')
+    const kdRatio = `${kills[0] ? kills[0].count : 0} : ${deaths[0] ? deaths[0].count : 0}`;
+    return kdRatio;
+  } catch (err) {
+    console.log('Error trying to find victim count: ', err);
+    return null;
+  }
+};
