@@ -1,0 +1,20 @@
+extends base
+
+block content
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.header__hero-img(src='/img/amongus.jpg', alt='So sus')
+
+  section.section-reviews
+    .reviews
+      h2.heading-secondary.ma-bt-lg Killed By Counts
+      each player in killedByCounts
+        div
+          span=player.player_name
+          span=player.killedby_count
+      h2.heading-secondary.ma-bt-lg Victim Counts
+      each player in victimCounts
+        div
+          span=player.player_name
+          span=player.victim_count

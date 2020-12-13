@@ -52,3 +52,74 @@ exports.createMurdersReturnIDs = async (player, gameID) => {
   );
   return murderIDs;
 };
+
+exports.getMostMurders = async (groupId) => {
+  try {
+    const playersOrderedByKillCount = await knex
+      .select(knex.raw('count(*) as kill_count, player.player_id, player.player_name'))
+      .from('murder')
+      .join('player', 'murder.player_id', '=', 'player.player_id')
+      .join('player_group', 'player.player_id', '=', 'player_group.player_id')
+      .join('group_', 'group_.group_id', '=', 'player_group.group_id')
+      .where({ 'group_.group_id': groupId })
+      .groupBy('player.player_id')
+      .orderByRaw('1 DESC');
+    return playersOrderedByKillCount;
+  } catch (err) {
+    console.log('Error trying to find killcount: ', err);
+    return null;
+  }
+};
+
+exports.getImposterCounts = async (groupId) => {
+  try {
+    const playersOrderedByImposterCount = await knex
+      .select(knex.raw('count(*) as imposter_count, player.player_id, player.player_name'))
+      .from('player')
+      .join('player_group', 'player.player_id', '=', 'player_group.player_id')
+      .join('group_', 'group_.group_id', '=', 'player_group.group_id')
+      .join('player_game', 'player_game.player_id', '=', 'player.player_id')
+      .where({ 'group_.group_id': groupId })
+      .where({ 'player_game.player_type': 'imp' })
+      .groupBy('player.player_id')
+      .orderByRaw('1 DESC');
+    return playersOrderedByImposterCount;
+  } catch (err) {
+    console.log('Error trying to find killcount: ', err);
+    return null;
+  }
+};
+
+exports.getKilledByCounts = async (player_id) => {
+  try {
+    const playersKilledByCounts = await knex
+      .select(knex.raw('count(*) as killedby_count, murder.player_id, player.player_name'))
+      .from('murder')
+      .join('player', 'player.player_id', '=', 'murder.player_id')
+      .where({ 'murder.victim_id': player_id })
+      .groupBy('murder.player_id', 'player.player_name')
+      .orderByRaw('1 DESC');
+    console.log('~ playersKilledByCounts', playersKilledByCounts);
+    return playersKilledByCounts;
+  } catch (err) {
+    console.log('Error trying to find killedby count: ', err);
+    return null;
+  }
+};
+
+exports.getVictimCounts = async (player_id) => {
+  try {
+    const victimCounts = await knex
+      .select(knex.raw('count(*) as victim_count, murder.victim_id, player.player_name'))
+      .from('murder')
+      .join('player', 'player.player_id', '=', 'murder.victim_id')
+      .where({ 'murder.player_id': player_id })
+      .groupBy('murder.player_id', 'murder.victim_id', 'player.player_name')
+      .orderByRaw('1 DESC');
+    console.log('~ victimCounts', victimCounts);
+    return victimCounts;
+  } catch (err) {
+    console.log('Error trying to find victim count: ', err);
+    return null;
+  }
+};

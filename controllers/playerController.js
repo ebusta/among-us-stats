@@ -15,6 +15,13 @@ exports.getAllPlayers = catchAsync(async (req, res, next) => {
   sendRes(res, '200', 'success', players);
 });
 
+exports.getPlayer = catchAsync(async (req, res, next) => {
+
+  const player = await Player.getPlayerById(req.params.player_id);
+  res.player = player
+  return next();
+});
+
 exports.createPlayer = catchAsync(async (req, res, next) => {
   const newPlayer = await Player.createPlayer(req.body.player_name);
   if (!newPlayer) {

@@ -43,3 +43,34 @@ exports.createNewGameStats = async (req, res, next) => {
     },
   });
 };
+
+exports.getPlayersByMurderCount = async (req, res, next) => {
+  const playersByMurderCount = await Stats.getMostMurders(req.group_id);
+  res.playersByMurderCount = playersByMurderCount;
+  res.locals.playersByMurderCount = playersByMurderCount;
+  return next();
+}
+
+exports.getPlayersByImposterCount = async (req, res, next) => {
+  const playersByImposterCount = await Stats.getImposterCounts(req.group_id);
+  console.log("~ playersByImposterCount", playersByImposterCount);
+  res.playersByImposterCount = playersByImposterCount;
+  res.locals.playersByImposterCount = playersByImposterCount;
+  return next();
+}
+
+exports.getKilledByCounts = async (req, res, next) => {
+  const killedByCounts = await Stats.getKilledByCounts(req.params.player_id);
+  console.log("~ killedByCounts", killedByCounts);
+  res.killedByCounts = killedByCounts;
+  res.locals.killedByCounts = killedByCounts;
+  return next();
+}
+
+exports.getVictimCounts = async (req, res, next) => {
+  const victimCounts = await Stats.getVictimCounts(req.params.player_id);
+  console.log("~ victimCounts", victimCounts);
+  res.victimCounts = victimCounts;
+  res.locals.victimCounts = victimCounts;
+  return next();
+}

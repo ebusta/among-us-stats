@@ -10,10 +10,23 @@ block content
     .heading-box
       h1.heading-primary
         span=group[0].group_name
+
   section.section-reviews
     .reviews
       each player in players
         +playerCard(player)
+    h2.heading-secondary.ma-bt-lg Kill Counts
+    each player in playersByMurderCount
+      div
+        span=player.player_name
+        span=player.kill_count
+    h2.heading-secondary.ma-bt-lg Imposter Counts
+    each player in playersByImposterCount
+      div
+        span=player.player_name
+        span=player.imposter_count
+
+
   h2.heading-secondary.ma-bt-lg Add a new player
     form.form.form--add-player-to-group 
       .form__group

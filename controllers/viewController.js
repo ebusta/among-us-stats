@@ -18,6 +18,12 @@ exports.getGroup = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getPlayer = catchAsync(async (req, res, next) => {
+  res.status(200).render('player', {
+    title: res.player.player_name,
+  });
+});
+
 exports.getLoginForm = catchAsync(async (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',

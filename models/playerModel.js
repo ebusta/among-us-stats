@@ -30,3 +30,13 @@ exports.getPlayerIDByName = async (playerName, groupID) => {
     return null;
   }
 };
+
+exports.getPlayerById = async (player_id) => {
+  try {
+    const player = await knex('player').where({ player_id }).first();
+    return player;
+  } catch (err) {
+    //console.log(err);
+    return null;
+  }
+};
